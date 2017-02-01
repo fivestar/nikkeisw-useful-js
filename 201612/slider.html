@@ -1,0 +1,131 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Slider</title>
+  <style>
+    body {
+      margin: 0;
+      padding-top: 100px;
+    }
+    .slider {
+      position: relative;
+      width: 360px;
+      height: 162px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .slider-prev,
+    .slider-next {
+      position: absolute;
+      width: 30px;
+      height: 30px;
+      top: calc((162px - 30px) / 2);
+      font-size: 30px;
+      line-height: 30px;
+      text-align: center;
+      text-decoration: none;
+      color: #ccc;
+      z-index: 3;
+    }
+    .slider-prev {
+      left: 3px;
+    }
+    .slider-next {
+      right: 3px;
+    }
+    .slider-view {
+      position: relative;
+      width: 288px;
+      height: 162px;
+      margin-left: auto;
+      margin-right: auto;
+      overflow: hidden;
+      z-index: 2;
+    }
+    .slider-container {
+      position: absolute;
+      width: 5440px;
+      margin: 0;
+      padding: 0;
+      top: 0;
+      left: 0;
+      transition: left 0.3s ease-in-out;
+    }
+    .slider-slide {
+      float: left;
+      box-sizing: border-box;
+      width: 288px;
+      height: 162px;
+      padding: 20px;
+      background-color: #eee;
+      list-style-type: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="slider">
+    <a href="#" class="slider-prev">&lt;</a>
+    <a href="#" class="slider-next">&gt;</a>
+    <div class="slider-view">
+      <ul class="slider-container">
+        <li class="slider-slide active">おはよう</li>
+        <li class="slider-slide">こんにちは</li>
+        <li class="slider-slide">こんばんは</li>
+      </ul>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var slider = document.querySelector('.slider');
+        var prev = slider.querySelector('.slider-prev');
+        var next = slider.querySelector('.slider-next');
+        var view = slider.querySelector('.slider-view');
+        var container = slider.querySelector('.slider-container');
+        var slides = slider.querySelectorAll('.slider-slide');
+
+        var activeSlide = container.querySelector('.slider-slide.active');
+        var firstSlide = container.firstElementChild;
+        var lastSlide = container.lastElementChild;
+
+        for (var i = 0, len = slides.length; i < len; i++) {
+          slides[i].setAttribute('data-slide-index', i);
+        }
+
+        prev.addEventListener('click', function (event) {
+          event.preventDefault();
+          slidePrev();
+        });
+
+        next.addEventListener('click', function (event) {
+          event.preventDefault();
+          slideNext();
+        });
+
+        window.setInterval(slideNext, 3000);
+
+        function slideTo(nextSlide) {
+          var slideIndex = nextSlide.getAttribute('data-slide-index');
+          var slideLeftPos = (-view.clientWidth * slideIndex);
+
+          activeSlide.classList.remove('active');
+          nextSlide.classList.add('active');
+          activeSlide = nextSlide;
+
+          container.style.left = slideLeftPos + 'px';
+        }
+
+        function slidePrev() {
+          slideTo(activeSlide.previousElementSibling || lastSlide);
+        }
+
+        function slideNext() {
+          slideTo(activeSlide.nextElementSibling || firstSlide);
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

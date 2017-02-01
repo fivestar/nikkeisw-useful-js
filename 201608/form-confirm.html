@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Form Confirm</title>
+</head>
+<body>
+  <form id="formRegister" action="#">
+    <label for="agreement">
+      <input id="agreement" type="checkbox"> 規約に同意する
+    </label>
+    <div>
+      <button id="submit" type="submit" disabled>登録する</button>
+    </div>
+  </form>
+
+  <script>
+    (function() {
+      document.addEventListener('DOMContentLoaded', function() {
+        var formRegister = document.querySelector('#formRegister');
+        var checkboxAgreement = document.querySelector('#agreement');
+        var buttonSubmit = document.querySelector('#submit');
+
+        checkboxAgreement.addEventListener('change', function(event) {
+          buttonSubmit.disabled = !checkboxAgreement.checked;
+        });
+
+        formRegister.addEventListener('submit', function(event) {
+          if (!confirm('登録します。よろしいですか？')) {
+            event.preventDefault();
+            return;
+          }
+
+          alert('登録しました');
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

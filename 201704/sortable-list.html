@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Sortable List</title>
+  <style>
+    .sortable-list {
+      list-style: none;
+      width: 320px;
+      margin: 0;
+      padding: 0;
+    }
+    .sortable-item {
+      position: relative;
+      padding: 10px 36px 10px 16px;
+      border-bottom: 1px solid #eee;
+      box-sizing: border-box;
+      background-color: #fff;
+    }
+    .sortable-item.handling {
+      margin-top: -1px;
+      border-top: 1px solid #bbb;
+      border-bottom: 1px solid #bbb;
+    }
+    .sortable-item.ghost {
+      opacity: 0.2;
+      background-color: #ccc;
+    }
+    .sortable-handle {
+      display: inline-block;
+      position: absolute;
+      top: calc(50% - 18px);
+      right: 0;
+      width: 48px;
+      height: 36px;
+      line-height: 36px;
+      text-align: center;
+      cursor: move;
+    }
+    .sortable-handle:after {
+      color: #bbb;
+      font-style: normal;
+      font-family: Georgia, serif;
+      font-size: 32px;
+      content: "\002261";
+      -webkit-font-smoothing: antialiased;
+    }
+  </style>
+</head>
+<body>
+
+  <ul class="sortable-list">
+    <li class="sortable-item">
+      Item 1 <span class="sortable-handle"></span>
+    </li>
+    <li class="sortable-item">
+      Item 2 <span class="sortable-handle"></span>
+    </li>
+    <li class="sortable-item">
+      Item 3 <span class="sortable-handle"></span>
+    </li>
+    <li class="sortable-item">
+      Item 4 <span class="sortable-handle"></span>
+    </li>
+    <li class="sortable-item">
+      Item 5 <span class="sortable-handle"></span>
+    </li>
+  </ul>
+
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var list = document.querySelector('.sortable-list');
+        var items = list.querySelectorAll('.sortable-item');
+        var dragItem;
+
+        function switchItem(item, target) {
+          if (item === target) {
+            return;
+          }
+
+          var listArray = [].slice.call(list.children);
+          var sortIndex = listArray.indexOf(item);
+          var targetIndex = listArray.indexOf(target);
+
+          if (sortIndex < 0 || targetIndex < 0)  {
+            return;
+          }
+
+          list.insertBefore(item, (sortIndex > targetIndex) ? target : target.nextElementSibling);
+        }
+
+        [].forEach.call(items, function (item) {
+          var handle = item.querySelector('.sortable-handle');
+
+          handle.addEventListener('mousedown', function (event) {
+            var dragEvent = new Event('dragstart');
+            item.draggable = true;
+            item.dispatchEvent(dragEvent);
+          });
+
+          handle.addEventListener('mouseup', function (event) {
+            var dragEvent = new Event('dragend');
+            item.dispatchEvent(dragEvent);
+          });
+
+          item.addEventListener('dragstart', function (event) {
+            dragItem = item;
+            dragItem.classList.add('handling');
+          });
+
+          item.addEventListener('dragover', function (event) {
+            if (!dragItem) {
+              return;
+            }
+            event.preventDefault();
+            dragItem.classList.remove('handling');
+            dragItem.classList.add('ghost');
+            switchItem(dragItem, item);
+          });
+
+          item.addEventListener('dragend', function (event) {
+            if (!dragItem) {
+              return;
+            }
+            dragItem.classList.remove('ghost');
+            dragItem.classList.remove('handling');
+            dragItem.removeAttribute('draggable');
+            dragItem = null;
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

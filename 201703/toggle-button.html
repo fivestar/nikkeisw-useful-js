@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Toggle Button</title>
+  <style>
+    .button {
+      display: inline-block;
+      padding: 0 16px;
+      border: none;
+      border-radius: 2px;
+      background-color: #ddd;
+      color: #000;
+      font-size: 0.9em;
+      line-height: 36px;
+      text-decoration: none;
+      cursor: pointer;
+      user-select: none;
+    }
+    .button:hover {
+      background-color: #ccc;
+    }
+    .button.active {
+      background-color: #0bd;
+      color: #fff;
+    }
+    .button.active.on {
+      background-color: #0a3;
+      color: #fff;
+    }
+    .button.active.off {
+      background-color: #888;
+      color: #eee;
+    }
+    .toggle-button {
+      display: inline-block;
+      margin-top: 5px;
+      margin-bottom: 5px;
+    }
+    .toggle-button > .button {
+      float: left;
+    }
+    .toggle-button > .button input[type="radio"],
+    .toggle-button > .button input[type="checkbox"] {
+      display: none;
+    }
+    .toggle-button > .button:first-child:not(:last-child) {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+    .toggle-button > .button:last-child:not(:first-child) {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+    .toggle-button > .button:not(:first-child):not(:last-child) {
+      border-radius: 0;
+    }
+  </style>
+</head>
+<body>
+  <h3>単一選択</h3>
+  <div class="toggle-button">
+    <label class="button on">
+      <input type="radio" name="radio" checked> オン
+    </label>
+    <label class="button off">
+      <input type="radio" name="radio"> オフ
+    </label>
+  </div>
+
+  <h3>複数選択</h3>
+  <div class="toggle-button">
+    <label class="button">
+      <input type="checkbox" name="checkbox" checked> 項目1
+    </label>
+    <label class="button">
+      <input type="checkbox" name="checkbox"> 項目2
+    </label>
+    <label class="button">
+      <input type="checkbox" name="checkbox"> 項目3
+    </label>
+  </div>
+
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var toggleButtons = document.querySelectorAll('.toggle-button');
+
+        [].forEach.call(toggleButtons, function (toggleButton) {
+          var buttons = toggleButton.querySelectorAll('.button');
+
+          [].forEach.call(buttons, function (button) {
+            var input = button.querySelector('input');
+
+            if (input.checked) {
+              button.classList.add('active');
+            }
+
+            input.addEventListener('change', function (event) {
+              if (input.type === 'radio') {
+                var activeButton = toggleButton.querySelector('.button.active');
+                if (activeButton) {
+                  activeButton.classList.remove('active');
+                }
+              }
+
+              button.classList.toggle('active', input.checked);
+            });
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

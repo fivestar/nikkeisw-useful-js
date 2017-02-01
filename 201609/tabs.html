@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Tabs</title>
+  <style>
+    .tabs {
+      margin: 0;
+      padding: 0;
+      border-bottom: 1px solid #ccc;
+      background-color: #eee;
+    }
+    .tab {
+      display: inline-block;
+      margin: 0 0 -1px;
+      list-style-type: none;
+    }
+    .tab a {
+      display: block;
+      padding: 5px 10px;
+      color: #333;
+    }
+    .tab.tab-active {
+      border: 1px solid #ccc;
+      border-bottom-color: transparent;
+      background-color: #fff;
+    }
+    .tab-content {
+      display: none;
+      padding: 10px;
+    }
+    .tab-content.tab-content-active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="tab-container">
+    <ul class="tabs">
+      <li class="tab tab-active"><a href="#content1">製品1</a></li>
+      <li class="tab"><a href="#content2">製品2</a></li>
+    </ul>
+    <div class="contents">
+      <div id="content1" class="tab-content tab-content-active">
+        製品1の説明
+      </div>
+      <div id="content2" class="tab-content">
+        製品2の説明
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var tabContainers = document.querySelectorAll('.tab-container');
+
+        [].forEach.call(tabContainers, function (tabContainer) {
+          var tabs = tabContainer.querySelector('.tabs');
+          var contents = tabContainer.querySelector('.contents');
+          var tabItems = tabs.querySelectorAll('.tab');
+          var activeTab = tabs.querySelector('.tab-active');
+          var activeContent = contents.querySelector('.tab-content-active');
+
+          [].forEach.call(tabItems, function (tab) {
+            tab.querySelector('a').addEventListener('click', function (event) {
+              event.preventDefault();
+
+              var content = contents.querySelector(event.target.getAttribute('href'));
+
+              activeTab.classList.remove('tab-active');
+              activeContent.classList.remove('tab-content-active');
+
+              tab.classList.add('tab-active');
+              content.classList.add('tab-content-active');
+
+              activeTab = tab;
+              activeContent = content;
+            });
+          });
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

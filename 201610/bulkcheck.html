@@ -1,0 +1,44 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Bulk Check</title>
+</head>
+<body>
+  <table>
+    <thead>
+      <tr>
+        <th><input type="checkbox" id="bulk-check" data-target="check-target"></th>
+        <th>項目名</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><input type="checkbox" class="check-target" value="1"></td>
+        <td>項目1</td>
+      </tr>
+      <tr>
+        <td><input type="checkbox" class="check-target" value="2"></td>
+        <td>項目2</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var bulkCheck = document.querySelector('#bulk-check');
+        var targetClass = bulkCheck.getAttribute('data-target');
+        var targets = document.querySelectorAll('.' + targetClass);
+
+        bulkCheck.addEventListener('change', function (event) {
+          var isChecked = event.target.checked;
+          [].forEach.call(targets, function (target) {
+            target.checked = isChecked;
+          })
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Drill Down</title>
+</head>
+<body>
+  <h4>好きな食べ物はなんですか？</h4>
+  <form action="#" id="form">
+    <div>
+      <label for="select1">種類:</label>
+      <select name="select1" id="select1">
+        <option value="">--</option>
+        <option value="肉">肉</option>
+        <option value="野菜">野菜</option>
+      </select>
+    </div>
+    <div>
+      <label for="select2">品目:</label>
+      <select name="select2" id="select2">
+        <option value="">--</option>
+      </select>
+    </div>
+    <div>
+      <button type="submit">送信</button>
+    </div>
+  </form>
+
+  <script>
+    (function () {
+      document.addEventListener('DOMContentLoaded', function () {
+        var select2Choices = {
+          '': ['--'],
+          '肉': ['牛肉', '豚肉', '鶏肉'],
+          '野菜': ['キャベツ', 'たまねぎ', 'ピーマン', 'にんじん'],
+        }
+        var select1 = document.querySelector('#select1');
+        var select2 = document.querySelector('#select2');
+
+        select1.addEventListener('change', function (event) {
+          var choices = select2Choices[event.target.value];
+
+          for (var i = select2.length; i >= 0 ; i--) {
+            select2.remove(i)
+          }
+
+          choices.forEach(function (choice) {
+            select2.add(new Option(choice, choice));
+          });
+        });
+
+        select1.dispatchEvent(new Event('change'));
+      });
+    })();
+  </script>
+</body>
+</html>
